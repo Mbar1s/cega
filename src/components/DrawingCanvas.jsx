@@ -21,32 +21,24 @@ function DrawingCanvas() {
   }, []);
 
   const startDrawing = ({ nativeEvent }) => {
-    setDrawing(true);
-    const { left, top } = canvasRef.current.getBoundingClientRect();
-    const offsetX = nativeEvent.clientX - left;
-    const offsetY = nativeEvent.clientY - top;
-
+    const { offsetX, offsetY } = nativeEvent;
     contextRef.current.beginPath();
     contextRef.current.moveTo(offsetX, offsetY);
-    canvasRef.current.addEventListener("mousemove", continueDrawing);
-    canvasRef.current.addEventListener("mouseup", stopDrawing);
+    setDrawing(true);
   };
 
   const stopDrawing = () => {
+    contextRef.current.closePath();
     setDrawing(false);
-    canvasRef.current.removeEventListener("mousemove", continueDrawing);
-    canvasRef.current.removeEventListener("mouseup", stopDrawing);
   };
 
   const continueDrawing = ({ nativeEvent }) => {
-    if (drawing) {
-      const { left, top } = canvasRef.current.getBoundingClientRect();
-      const offsetX = nativeEvent.clientX - left;
-      const offsetY = nativeEvent.clientY - top;
-
-      contextRef.current.lineTo(offsetX, offsetY);
-      contextRef.current.stroke();
+    if (!drawing) {
+      return;
     }
+    const { offsetX, offsetY } = nativeEvent;
+    contextRef.current.lineTo(offsetX, offsetY);
+    contextRef.current.stroke();
   };
   return (
     <canvas
@@ -54,7 +46,7 @@ function DrawingCanvas() {
       ref={canvasRef}
       onMouseDown={startDrawing}
       onMouseMove={continueDrawing}
-      onMouseOut={stopDrawing}
+      onMouseUp={stopDrawing}
     />
   );
 }
