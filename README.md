@@ -1,2 +1,2 @@
 # cega
- cega project
+ drawable landing page for cega 
