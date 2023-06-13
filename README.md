@@ -1,2 +1,2 @@
 # cega
- drawable landing page for cega 
+ drawable landing page submitted for cega 
